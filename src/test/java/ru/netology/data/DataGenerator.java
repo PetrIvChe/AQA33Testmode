@@ -1,7 +1,6 @@
 package ru.netology.data;
 
 import com.github.javafaker.Faker;
-import com.google.gson.Gson;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
@@ -26,22 +25,24 @@ public class DataGenerator {
     }
 
     private static void sendRequest(RegistrationInfo user) {
-        given()
-                .spec(requestSpec)
-                .body(new Gson().toJson(user))
-                .when()
-                .post("/api/system/users")
-                .then()
-                .statusCode(200);
+        given() // "дано"
+                .spec(requestSpec) // указываем, какую спецификацию используем
+                .body(new DataGenerator.RegistrationInfo("vasya", "password", "active")) // передаём в теле объект, который будет преобразован в JSON
+                .when() // "когда"
+                .post("/api/system/users") // на какой путь относительно BaseUri отправляем запрос
+                .then() // "тогда ожидаем"
+                .statusCode(200); // код 200 OK
     }
 
     public static String getRandomLogin() {
-        String login = faker.name().username();
+        String login;
+        login = faker.name().name();
         return login;
     }
 
     public static String getRandomPassword() {
-        String password = faker.internet().password();
+        String password;
+        password = faker.internet().password();
         return password;
     }
 
@@ -50,7 +51,8 @@ public class DataGenerator {
         }
 
         public static RegistrationInfo getUser(String status) {
-            RegistrationInfo user = new RegistrationInfo(getRandomLogin(), getRandomPassword(), status);
+            RegistrationInfo user;
+            user = new RegistrationInfo(getRandomLogin(), getRandomPassword(), status);
             return user;
         }
 
